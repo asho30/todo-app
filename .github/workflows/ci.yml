@@ -9,42 +9,36 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
-    # --- NEW: Set a default working directory for all steps in this job ---
-    # This ensures all commands run from inside your project folder.
-    defaults:
-      run:
-        working-directory: ./todo-app
-
     steps:
-      # --- UPDATED: Explicitly check out into a 'todo-app' subdirectory ---
+      # Step 1: Checkout the code. This places your repo at a path like /home/runner/work/todo-app/todo-app
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          path: 'todo-app'
 
+      # Step 2: Setup Node.js
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # This step will now correctly run inside the ./todo-app directory
+      # Step 3: Install dependencies. By default, this 'run' command executes
+      # at the root of your checked-out repository, which is what we want.
       - name: Install All Dependencies
         run: |
           npm install
           npm install --prefix backend
           npm install --prefix frontend
 
-      # The Cypress action will also use the default working directory
+      # Step 4: Run Cypress. This action also runs from the repository root by default.
       - name: Run Cypress Tests and Collect Coverage
         uses: cypress-io/github-action@v6
         with:
           start: npm run start:coverage
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
+          # We explicitly disable the action's install step because we did it ourselves.
           install: false
 
-      # The Codecov action will also find the coverage folder correctly
+      # Step 5: Upload the report. The path is relative to the repository root.
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
         with:
