@@ -24,10 +24,13 @@ jobs:
           (cd backend && npm install)
           (cd frontend && npm install)
 
-      # This step now fixes the permissions for npm-run-all, cypress,
-      # start-server-and-test, and any other package executable.
+      # --- UPDATED: Grant execute permissions to ALL scripts in ALL node_modules folders ---
+      # This is the final, comprehensive fix for all "Permission denied" errors.
       - name: Add execute permissions to all scripts
-        run: chmod +x ./node_modules/.bin/*
+        run: |
+          chmod +x ./node_modules/.bin/*
+          chmod +x ./frontend/node_modules/.bin/*
+          chmod +x ./backend/node_modules/.bin/*
 
       - name: Run E2E Tests
         run: npm run test:ci
