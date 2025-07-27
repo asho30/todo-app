@@ -18,18 +18,16 @@ jobs:
         with:
           node-version: '20'
 
-      # --- UPDATED: Use 'cd' for explicit directory changes ---
       - name: Install All Dependencies
         run: |
           echo "--- Installing root dependencies in $(pwd) ---"
           npm install
           
           echo "--- Installing backend dependencies ---"
-          cd backend && npm install
+          (cd backend && npm install)
           
           echo "--- Installing frontend dependencies ---"
-          # Go back to the root before entering the frontend directory
-          cd ../frontend && npm install
+          (cd frontend && npm install)
 
       - name: Run Cypress Tests and Collect Coverage
         uses: cypress-io/github-action@v6
