@@ -24,13 +24,17 @@ jobs:
           (cd backend && npm install)
           (cd frontend && npm install)
 
-      # --- UPDATED: Grant execute permissions to ALL scripts in ALL node_modules folders ---
-      # This is the final, comprehensive fix for all "Permission denied" errors.
       - name: Add execute permissions to all scripts
         run: |
           chmod +x ./node_modules/.bin/*
           chmod +x ./frontend/node_modules/.bin/*
           chmod +x ./backend/node_modules/.bin/*
+      
+      # --- NEW STEP: Force Cypress binary installation ---
+      # This command explicitly downloads and installs the Cypress application,
+      # fixing the "binary is missing" error.
+      - name: Install Cypress Binary
+        run: npx cypress install
 
       - name: Run E2E Tests
         run: npm run test:ci
