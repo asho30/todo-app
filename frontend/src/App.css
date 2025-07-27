@@ -1,0 +1,101 @@
+body {
+    background-color: #282c34;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.App {
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+input[type="text"], input[type="password"] {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 250px;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #61dafb;
+    color: #282c34;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.error {
+    color: #ff4d4d;
+}
+
+.todo-container {
+    margin-top: 20px;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+}
+
+.task-list li {
+    background-color: #444a57;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px; /* Add space between items */
+}
+
+/* ✨ NEW: Styles for completed tasks */
+.task-list li.completed .task-text {
+    text-decoration: line-through;
+    color: #a0a0a0;
+}
+
+.task-checkbox {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+.task-text {
+    flex-grow: 1; /* Make text take available space */
+    text-align: left;
+}
+
+.task-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.task-buttons .edit-btn {
+    background-color: #f0ad4e;
+}
+
+.task-buttons .delete-btn {
+    background-color: #d9534f;
+    color: white;
+}
+
+.edit-form {
+    display: flex;
+    width: 100%;
+}
+
+.edit-form input {
+    flex-grow: 1;
+}
