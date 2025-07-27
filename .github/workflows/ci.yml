@@ -1,43 +1,42 @@
-# Name of the workflow
-name: End-to-End Tests
+name: Test, Coverage and Report
 
-# Controls when the action will run. 
-# Triggers the workflow on push or pull request events but only for the main branch.
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # The "test" job
   test:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # The official Cypress GitHub Action is the recommended way to run Cypress tests
-      - name: Run Cypress Tests
+      # --- NEW: Explicitly install dependencies for all parts of the project ---
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install All Dependencies
+        run: |
+          npm install
+          npm install --prefix backend
+          npm install --prefix frontend
+
+      # --- UPDATED: Cypress action now assumes a ready environment ---
+      - name: Run Cypress Tests and Collect Coverage
         uses: cypress-io/github-action@v6
         with:
-          # Command to install all dependencies (root, frontend, backend)
-          # This assumes your package.json files use "npm install" in their "preinstall" or similar scripts
-          # or you can list them out. For simplicity, we'll install in steps.
-          # First, let's install dependencies manually for clarity.
-          install: false
-          
-          # We need to run all services first
-          start: npm start
-          
-          # URL to wait for before starting tests
+          # This command will now work because npm-run-all is installed
+          start: npm run start:coverage
           wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          # We can safely disable the action's install step as we did it manually
+          install: false
 
-        env:
-          # Pass environment variables to Cypress
-          CI: true
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./coverage
