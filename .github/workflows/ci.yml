@@ -37,7 +37,7 @@ jobs:
           # The 'start' command is removed because the server is already running.
           # The action will wait for the URL to be available before running tests.
           wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
+          wait-on-timeout: 300
           install: false
 
       - name: Upload coverage reports to Codecov
