@@ -20,19 +20,22 @@ jobs:
 
       - name: Install All Dependencies
         run: |
-          echo "--- Installing root dependencies in $(pwd) ---"
           npm install
-          
-          echo "--- Installing backend dependencies ---"
           (cd backend && npm install)
-          
-          echo "--- Installing frontend dependencies ---"
           (cd frontend && npm install)
 
-      - name: Run Cypress Tests and Collect Coverage
+      # --- NEW STEP: Start servers in the background ---
+      # We run the command in its own step to ensure it has the correct PATH.
+      # The '&' at the end tells the shell to run this as a background process.
+      - name: Start Servers in Background
+        run: npm run start:coverage &
+
+      # --- UPDATED STEP: Cypress action now just waits and runs tests ---
+      - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
-          start: npm run start:coverage
+          # The 'start' command is removed because the server is already running.
+          # The action will wait for the URL to be available before running tests.
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
           install: false
