@@ -24,8 +24,12 @@ jobs:
           (cd backend && npm install)
           (cd frontend && npm install)
 
-      # UPDATED: This single step now handles starting the server,
-      # waiting for it, and running the tests.
+      # --- NEW STEP: Grant execute permissions to the script ---
+      # This is the definitive fix for the "Permission denied" error code 126.
+      - name: Add execute permissions to script
+        run: chmod +x ./node_modules/.bin/start-server-and-test
+
+      # This step will now succeed because the script is executable.
       - name: Run E2E Tests
         run: npm run test:ci
 
