@@ -24,21 +24,10 @@ jobs:
           (cd backend && npm install)
           (cd frontend && npm install)
 
-      # --- NEW STEP: Start servers in the background ---
-      # We run the command in its own step to ensure it has the correct PATH.
-      # The '&' at the end tells the shell to run this as a background process.
-      - name: Start Servers in Background
-        run: npm run start:coverage &
-
-      # --- UPDATED STEP: Cypress action now just waits and runs tests ---
-      - name: Run Cypress Tests
-        uses: cypress-io/github-action@v6
-        with:
-          # The 'start' command is removed because the server is already running.
-          # The action will wait for the URL to be available before running tests.
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 300
-          install: false
+      # UPDATED: This single step now handles starting the server,
+      # waiting for it, and running the tests.
+      - name: Run E2E Tests
+        run: npm run test:ci
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
